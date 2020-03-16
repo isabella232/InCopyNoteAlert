@@ -1,7 +1,7 @@
 ﻿//
 // ShowNotes.jsx - a script for Adobe InDesign and InCopy 
 //
-// Version 1.01 - 28-Feb-2019
+// Version 1.02 - 7-March-2020
 //
 // by Kris Coppieters 
 // kris@rorohiko.com
@@ -61,7 +61,7 @@ function cleanupNotes() {
         var docCount = app.documents.length;
         for (var docIdx = 0; docIdx < docCount; docIdx++) {
             var document = app.documents.item(docIdx);
-            var url = document.fullName.absoluteURI;
+            var url = getURL(document);
             seenDocs[url] = docIdx;            
         }
 
@@ -90,7 +90,7 @@ function gotoCurrentNote() {
         }
 
         var document = app.activeDocument;
-        var url = document.fullName.absoluteURI;
+        var url = getURL(document);
         if (! (url in gNotesByDocumentURL)) {
             detectNotes(document);
         }
@@ -141,6 +141,18 @@ function gotoCurrentNote() {
     while (false);
 }
 
+function getURL(document) {
+    var url;
+    if (document.saved) {
+        url = document.fullName.absoluteURI;
+    }
+    else {
+        url = document.name;
+    }
+
+    return url;
+}
+
 function detectNotes(document) {
 
     var hasNotes = false;
@@ -154,7 +166,7 @@ function detectNotes(document) {
                 break;
             }
 
-            var url = document.fullName.absoluteURI;
+            var url = getURL(document);
 
             var docEntry = {};
             if (! gNotesByDocumentURL) {
