@@ -33,7 +33,7 @@
 //
 // For installation info and documentation: visit 
 //
-// https://rorohiko.com/wordpress/dont-let-adobe-indesign-incopy-notes-go-unnoticed
+// https://github.com/zwettemaan/InCopyNoteAlert/wiki
 //
 // To tweak this script: carefully make sensible adjustments between the two lines
 // 'CONFIFURATION' - 'END OF CONFIGURATION' below, and make sure to restart InDesign
