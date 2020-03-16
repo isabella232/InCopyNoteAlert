@@ -52,7 +52,7 @@ var gMillisecondsToWaitForIdle = 1000;
 
 // END OF CONFIGURATION
 
-var gNotesByDocumentURL = {};
+var gNotesByDocumentKey = {};
 
 function cleanupNotes() {
 
@@ -61,19 +61,19 @@ function cleanupNotes() {
         var docCount = app.documents.length;
         for (var docIdx = 0; docIdx < docCount; docIdx++) {
             var document = app.documents.item(docIdx);
-            var url = getURL(document);
-            seenDocs[url] = docIdx;            
+            var documentKey = getDocumentKey(document);
+            seenDocs[documentKey] = docIdx;            
         }
 
         var goneDocs = {};
-        for (var url in gNotesByDocumentURL) {
-            if (! (url in seenDocs)) {
-                goneDocs[url] = true;
+        for (var documentKey in gNotesByDocumentKey) {
+            if (! (documentKey in seenDocs)) {
+                goneDocs[documentKey] = true;
             }
         }
 
-        for (var url in goneDocs) {
-            delete gNotesByDocumentURL[url];
+        for (var documentKey in goneDocs) {
+            delete gNotesByDocumentKey[documentKey];
         }
     }
     catch (err) {    
@@ -90,12 +90,12 @@ function gotoCurrentNote() {
         }
 
         var document = app.activeDocument;
-        var url = getURL(document);
-        if (! (url in gNotesByDocumentURL)) {
+        var documentKey = getDocumentKey(document);
+        if (! (documentKey in gNotesByDocumentKey)) {
             detectNotes(document);
         }
 
-        var docEntry = gNotesByDocumentURL[url];
+        var docEntry = gNotesByDocumentKey[documentKey];
         if (! docEntry) {
             break;
         }
@@ -141,16 +141,16 @@ function gotoCurrentNote() {
     while (false);
 }
 
-function getURL(document) {
-    var url;
+function getDocumentKey(document) {
+    var documentKey;
     if (document.saved) {
-        url = document.fullName.absoluteURI;
+        documentKey = document.fullName.absoluteURI;
     }
     else {
-        url = document.name;
+        documentKey = "unsaved:" + document.name;
     }
 
-    return url;
+    return documentKey;
 }
 
 function detectNotes(document) {
@@ -166,14 +166,14 @@ function detectNotes(document) {
                 break;
             }
 
-            var url = getURL(document);
+            var documentKey = getDocumentKey(document);
 
             var docEntry = {};
-            if (! gNotesByDocumentURL) {
-                gNotesByDocumentURL = {};
+            if (! gNotesByDocumentKey) {
+                gNotesByDocumentKey = {};
             }
         
-            gNotesByDocumentURL[url] = docEntry;
+            gNotesByDocumentKey[documentKey] = docEntry;
             
             docEntry.noteEntries = [];
             docEntry.curNoteIdx = 0;
