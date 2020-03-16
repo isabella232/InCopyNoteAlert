@@ -321,6 +321,21 @@ function gotoCurrentNote() {
     while (false);
 }
 
+function logError(errorMsg) {
+
+    try {
+        if (gLogging) {
+            gLogFile.open("a");
+            gLogFile.writeln(errorMsg);
+            gLogFile.close();
+        }        
+    }
+    catch (err) {
+        alert("Critical error: the logError function failed and threw an error: " + err);
+    }
+
+}
+
 function main() {
 
     try {
@@ -349,21 +364,6 @@ function main() {
     catch (err) {
         logError("main: throws " + err);
     }
-}
-
-function logError(errorMsg) {
-
-    try {
-        if (gLogging) {
-            gLogFile.open("a");
-            gLogFile.writeln(errorMsg);
-            gLogFile.close();
-        }        
-    }
-    catch (err) {
-        alert("Critical error: the logError function failed and threw an error: " + err);
-    }
-
 }
 
 function showPanel(panelName) {
